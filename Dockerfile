@@ -6,6 +6,8 @@ RUN apt-get update \
         libxml2-dev \
         libmcrypt-dev \
         zlib1g-dev \
+        libzip-dev \
+        zip \
 	# Install PHP extensions.
 	&& docker-php-ext-install -j$(nproc) \
         zip \
@@ -16,9 +18,9 @@ RUN apt-get update \
 	# Configure apache.
 	&& a2enmod rewrite
 # Add custom php.ini.
-ADD ./.build/php.ini /usr/local/etc/php/conf.d/z99-additional-php.ini
+ADD ./php.ini /usr/local/etc/php/conf.d/z99-additional-php.ini
 # Add vhost.
-ADD ./.build/vhost.conf /etc/apache2/sites-enabled/000-default.conf
+ADD ./vhost.conf /etc/apache2/sites-enabled/000-default.conf
 # Clean up.
 RUN apt-get clean \
     && apt-get -y purge \
