@@ -1,5 +1,6 @@
 FROM php:7.4-apache
 RUN apt-get update \
+    && apt-get upgrade -y \
 	&& apt-get install -y --no-install-recommends \
         curl \
         libfreetype6-dev \
@@ -8,6 +9,7 @@ RUN apt-get update \
         zlib1g-dev \
         libzip-dev \
         zip \
+        git \
 	# Install PHP extensions.
 	&& docker-php-ext-install -j$(nproc) \
         zip \
