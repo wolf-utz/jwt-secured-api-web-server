@@ -3,3 +3,4 @@
 out
 .database
 app/
+.env

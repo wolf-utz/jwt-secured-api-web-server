@@ -1,19 +1,18 @@
 #!/bin/bash
 
-read -p "Please enter docker hub username: " username
-read -s -p "Please enter docker hub password: " password
+# Load .env data
+export $(echo $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs) | envsubst)
 
-echo ""
 echo  "Try to login to docker hub..."
-docker login -u "$username" -p "$password" &> /dev/null || (echo "Login failed!" && exit 1)
+docker login -u "$DOCKERHUB_USERNAME" -p "$DOCKERHUB_PASSWORD" &> /dev/null || (echo "Login failed!" && exit 1)
 
 read -p "Please enter the tag name of the new release: " tag
 
 echo "Building image with tag \"$tag\"..."
-docker build -t omegacode/jwt-secured-api-web-server:"$tag" . &> /dev/null || (echo "Build failed"! && exit 1)
+docker build -t "$DOCKERHUB_REPOSITORY":"$tag" . &> /dev/null || (echo "Build failed"! && exit 1)
 
 echo "Pushing image to hub..."
-docker push omegacode/jwt-secured-api-web-server:"$tag" &> /dev/null || (echo "Push failed!" && exit 1)
+docker push "$DOCKERHUB_REPOSITORY":"$tag" &> /dev/null || (echo "Push failed!" && exit 1)
 
 echo "Tag \"$tag\" has been released successfully. Finally logging out..."
 docker logout &> /dev/null || (echo "Logout failed!" && exit 1)
