@@ -10,12 +10,15 @@ RUN apt-get update \
         libzip-dev \
         zip \
         git \
-	# Install PHP extensions.
+        libpng-dev \
+        libjpeg-dev \
+	# Install PHP extensions. \
+    && docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ \
 	&& docker-php-ext-install -j$(nproc) \
         zip \
         pdo_mysql \
         intl \
-        zlib \
+        gd \
     # Add composer.
 	&& curl -sS https:/getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
 	# Configure apache.
